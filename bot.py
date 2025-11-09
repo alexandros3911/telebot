@@ -6,7 +6,7 @@ from bot_logic import gen_pass, gen_emodji, flip_coin
     
     # Замени 'TOKEN' на токен твоего бота
     # Этот токен ты получаешь от BotFather, чтобы бот мог работать
-bot = telebot.TeleBot("8270400254:AAGz_6SsEunD9NE4fT_gO62QEegrlzQEKhM")
+bot = telebot.TeleBot("TOKEN")
     
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
@@ -65,3 +65,4 @@ def echo_message(message):
 bot.infinity_polling()
 
     
+
