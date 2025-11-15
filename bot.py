@@ -3,10 +3,11 @@ import random
 import os
 
 from bot_logic import gen_pass, gen_emodji, flip_coin
+from bot_token import BOT_TOKEN 
     
-    # Замени 'TOKEN' на токен твоего бота
+    # Замени 'BOT_TOKEN' на токен твоего бота
     # Этот токен ты получаешь от BotFather, чтобы бот мог работать
-bot = telebot.TeleBot("TOKEN")
+bot = telebot.TeleBot(BOT_TOKEN)
     
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
@@ -19,6 +20,18 @@ def send_hello(message):
 @bot.message_handler(commands=['bye'])
 def send_bye(message):
     bot.reply_to(message, "Пока! Удачи!")
+
+@bot.message_handler(commands=['mem'])
+def send_mem(message):
+   # А вот так можно подставить имя файла из переменной!
+    print(os.listdir('images'))
+    with open(f'images/{img_name}', 'rb') as f:  
+        bot.send_photo(message.chat.id, f)  
+
+
+@bot.message_handler(commands=['eco'])
+def send_eco(messege):
+    bot.reply_to(message,"Привет вот твой сайте:  https://free-eco.ru/articles/top-20-ekologicheskih-saytov ")
 
 
 @bot.message_handler(commands=['pass'])
@@ -49,12 +62,6 @@ Hi there, I am EchoBot.
 I am here to echo your kind words back to you. Just say anything nice and I'll say the exact same thing to you!\
 """)
 
-@bot.message_handler(commands=['mem'])
-def send_mem(message):
-    img_list = os.listdir(r'C:\Users\rearzty\Desktop\kodland lessons\lesson_5\images')
-    img_name = random.choice(img_list)
-    with open(fr'C:\Users\rearzty\Desktop\kodland lessons\lesson_5\images\{img_name}', 'rb') as f:  
-        bot.send_photo(message.chat.id, f)  
 
 # Handle all other messages with content_type 'text' (content_types defaults to ['text'])
 @bot.message_handler(func=lambda message: True)
@@ -64,5 +71,7 @@ def echo_message(message):
 
 bot.infinity_polling()
 
+
     
+
 
