@@ -1,12 +1,11 @@
+import logging
 import telebot
 import random
 import os
 
+from model import get_class
 from bot_logic import gen_pass, gen_emodji, flip_coin
 from bot_token import BOT_TOKEN 
-    
-    # Замени 'BOT_TOKEN' на токен твоего бота
-    # Этот токен ты получаешь от BotFather, чтобы бот мог работать
 bot = telebot.TeleBot(BOT_TOKEN)
     
 @bot.message_handler(commands=['start'])
@@ -23,15 +22,16 @@ def send_bye(message):
 
 @bot.message_handler(commands=['mem'])
 def send_mem(message):
-   # А вот так можно подставить имя файла из переменной!
-    print(os.listdir('images'))
-    with open(f'images/{img_name}', 'rb') as f:  
+    img_dir = 'bot/images'
+    # А вот так можно подставить имя файла из переменной!
+    img_name = random.choice(os.listdir(img_dir))
+    with open(f'{img_dir}/{img_name}', 'rb') as f:   # type: ignore
         bot.send_photo(message.chat.id, f)  
 
 
 @bot.message_handler(commands=['eco'])
-def send_eco(messege):
-    bot.reply_to(message,"Привет вот твой сайте:  https://free-eco.ru/articles/top-20-ekologicheskih-saytov ")
+def send_eco(message):
+    bot.reply_to(message, "Привет вот твой сайте:  https://free-eco.ru/articles/top-20-ekologicheskih-saytov ")
 
 
 @bot.message_handler(commands=['pass'])
@@ -51,7 +51,7 @@ def send_coin(message):
 
 @bot.message_handler(commands=['help'])
 def send_help(message):
-    bot.reply_to(message, "Вот список команд, которые я понимаю:\n /start - начать общение с ботом\n /hello - поздороваться с ботом\n /bye - попрощаться с ботом\n /pass - сгенерировать пароль\n /emodji - получить случайный эмоджи\n /coin - подбросить монетку\n /mem - получить мем")
+    bot.reply_to(message, "Вот список команд, которые я понимаю:\n /start - начать общение с ботом\n /hello - поздороваться с ботом\n /bye - попрощаться с ботом\n /pass - сгенерировать пароль\n /emodji - получить случайный эмоджи\n /coin - подбросить монетку\n /mem - получить мем \n /eco - получить сайт с экологической тематикой\n /help - показать это сообщение")
 
 
 # Handle '/start' and '/help'
@@ -68,10 +68,19 @@ I am here to echo your kind words back to you. Just say anything nice and I'll s
 def echo_message(message):
     bot.reply_to(message, message.text)
 
+@bot.message_handler(content_types=['photo'])
+def get_photo(message):
+    file_info = bot.get_file(message.photo[-1].file_id)
+    file_name = file_info.file_path.split('/')[-1]
+    downloaded_file = bot.download_file(file_info.file_path)
+    with open(file_name, 'wb') as new_file:
+        new_file.write(downloaded_file)
+    
+    bot.reply_to(message, "Крутая фотка!")
 
-bot.infinity_polling()
-
+bot.infinity_polling(
+    logger_level=logging.DEBUG,
+    # restart_on_change=True,
+)
 
     
-
-
