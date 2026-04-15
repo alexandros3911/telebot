@@ -78,9 +78,13 @@ def get_photo(message):
     
     bot.reply_to(message, "Крутая фотка!")
 
+
+logging.basicConfig(level=logging.INFO)
+logging.info("starting bot")
+
 bot.infinity_polling(
-    logger_level=logging.DEBUG,
-    # restart_on_change=True,
+    logger_level=logging.INFO,
+    restart_on_change=True,
 )
 
     
