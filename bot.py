@@ -68,13 +68,18 @@ I am here to echo your kind words back to you. Just say anything nice and I'll s
 def echo_message(message):
     bot.reply_to(message, message.text)
 
-@bot.message_handler(content_types=['photo'])
-def get_photo(message):
-    file_info = bot.get_file(message.photo[-1].file_id)
-    file_name = file_info.file_path.split('/')[-1]
-    downloaded_file = bot.download_file(file_info.file_path)
-    with open(file_name, 'wb') as new_file:
-        new_file.write(downloaded_file)
+@bot.message_handler(content_types=['photo' ])
+def handle_docs_photo(message):
+if not message.photo:
+return bot.send_message(message.chat.id, "Вы забыли загрузить картинку :(")
+file_info = bot.get_file(message.photo[-1].file_id)
+file_name = file_info.file_path.split('/')[-1]
+downloaded_file = bot.download_file(file_info.file_path)
+with open(file_name, 'wb') as new_file:
+new_file.write(downloaded_file)
+result = get_class("model.h5", "labels.txt", file_name)
+bot.reply_to(message, f"Ha
+картинке изображено: {result[0]} с вероятностью {result[1] :. 2f} "5
     
     bot.reply_to(message, "Крутая фотка!")
 
