@@ -149,7 +149,7 @@ def echo_message(message):
         dialog_history[user_id] = dialog_history[user_id][-MAX_HISTORY:]
 
         bot.delete_message(thinking_message.chat.id, thinking_message.message_id)
-        
+
         bot.reply_to(message, bot_reply)
 
     except Exception as e:
@@ -169,6 +169,15 @@ def echo_message_2(message):
 def echo_message_3(message):
     bot.reply_to(message, " Вот еще один экологический сайт: https://www.wwf.org/")
 
+
+
+@bot.message_handler(commands=['eco_2'])
+def echo_message_2(message):
+    bot.reply_to(message, "Вот еще один экологический сайт: https://www.greenpeace.org/")
+
+@bot.message_handler(commands=['eco_3'])
+def echo_message_2(message):
+    bot.reply_to(message, "")
 
 logging.basicConfig(level=logging.INFO)
 logging.info("starting bot")
